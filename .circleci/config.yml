@@ -9,20 +9,10 @@ jobs:
           command: |
             VAULT_TOKEN=$(curl -X POST -H "Content-Type: application/json" \
             -d '{ "role": "circleci-role" }' \
-            https://vault.example.com/v1/auth/oidc/login | jq -r .auth.client_token)
+            https://bbarkhouse-vault-cluster.vault.ccaa60c2-b32a-48c6-a722-261bab55cd7c.aws.hashicorp.cloud:8200/v1/auth/oidc/login | jq -r .auth.client_token)
             echo "export VAULT_TOKEN=$VAULT_TOKEN" >> $BASH_ENV
 
       - run:
-          name: Assume AWS IAM Role
+          name: Echo token from bash var
           command: |
-            AWS_CREDS=$(curl -H "X-Vault-Token: $VAULT_TOKEN" \
-            https://vault.example.com/v1/aws/creds/circleci-role)
-            export AWS_ACCESS_KEY_ID=$(echo $AWS_CREDS | jq -r .data.access_key)
-            export AWS_SECRET_ACCESS_KEY=$(echo $AWS_CREDS | jq -r .data.secret_key)
-            export AWS_SESSION_TOKEN=$(echo $AWS_CREDS | jq -r .data.security_token)
-            echo "AWS credentials acquired"
-
-      - run:
-          name: Deploy to AWS
-          command: |
-            aws s3 ls
+            echo $VAULT_TOKEN
