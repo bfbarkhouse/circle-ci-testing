@@ -9,7 +9,7 @@ jobs:
           command: |
             VAULT_TOKEN=$(curl -X POST -H "Content-Type: application/json" \
             -d '{ "role": "circleci-role", "jwt": "'$CIRCLE_OIDC_TOKEN'" }' \
-            https://bbarkhouse-vault-cluster.vault.ccaa60c2-b32a-48c6-a722-261bab55cd7c.aws.hashicorp.cloud:8200/v1/auth/oidc/login | jq -r .auth.client_token)
+            https://bbarkhouse-vault-cluster.vault.ccaa60c2-b32a-48c6-a722-261bab55cd7c.aws.hashicorp.cloud:8200/v1/auth/oidc/login)
             echo "export VAULT_TOKEN=$VAULT_TOKEN" >> $BASH_ENV
 
       - run:
